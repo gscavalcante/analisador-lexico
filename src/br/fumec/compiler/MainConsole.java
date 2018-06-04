@@ -2,7 +2,7 @@ package br.fumec.compiler;
 
 import java.util.Scanner;
 
-public class Main {
+public class MainConsole {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
