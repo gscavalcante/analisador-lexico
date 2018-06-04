@@ -12,17 +12,9 @@ public class LexicalScanner {
 	}
 
 	public boolean validate(String phrase) {
-		try {
-			return validateWithoutVerify(phrase);
-		} catch (IndexOutOfBoundsException e) {
-			return false;
-		}
-	}
-	
-	private boolean validateWithoutVerify(String phrase) {
 		int i = 0;
 		String state = "Q14";
-		
+
 		if (phrase == null || phrase.equals("")) {
 			return true;
 		}
@@ -31,14 +23,13 @@ public class LexicalScanner {
 
 			switch (state) {
 			case "Q14":
-				while (search(phrase.charAt(i), SPACE)) {
+				if (search(phrase.charAt(i), SPACE)) {
 					i++;
-					
+
 					if (isNextPositionEmpty(phrase, i)) {
 						return true;
 					}
-				}
-				if (phrase.charAt(i) == '/') {
+				} else if (phrase.charAt(i) == '/') {
 					state = "Q1";
 					i++;
 				} else if (search(phrase.charAt(i), LETTER)) {
@@ -60,17 +51,17 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q2":
-				while (phrase.charAt(i) != '*') {
+				if (phrase.charAt(i) != '*') {
+					i++;
+				} else {
+					state = "Q3";
 					i++;
 				}
-				state = "Q3";
-				i++;
 				break;
 			case "Q3":
-				while (phrase.charAt(i) == '*') {
+				if (phrase.charAt(i) == '*') {
 					i++;
-				}
-				if (phrase.charAt(i) != '/') {
+				} else if (phrase.charAt(i) != '/') {
 					state = "Q2";
 					i++;
 				} else {
@@ -83,10 +74,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q10":
-				while (search(phrase.charAt(i), SPACE)) {
+				if (search(phrase.charAt(i), SPACE)) {
 					i++;
-				}
-				if (isBeginCommentBlock(phrase, i)) {
+				} else if (isBeginCommentBlock(phrase, i)) {
 					state = "E6";
 					i += 2;
 				} else if (search(phrase.charAt(i), LETTER)) {
@@ -98,15 +88,14 @@ public class LexicalScanner {
 				} else {
 					return isNextPositionEmpty(phrase, i);
 				}
-				
+
 				break;
 			case "Q5": // Q5
 				return true;
 			case "Q30":
-				while (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
+				if (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
 					i++;
-				}
-				if (phrase.charAt(i) == '/') {
+				} else if (phrase.charAt(i) == '/') {
 					state = "E0";
 					i++;
 				} else if (phrase.charAt(i) == '=') {
@@ -120,21 +109,17 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q0":
-				if (phrase.charAt(i) == '*') {
-					i++;
-					if (phrase.charAt(i) == '/') {
-						state = "Q8";
-						i++;
-					}
+				if (isEndCommentBlock(phrase, i)) {
+					state = "Q8";
+					i += 2;
 				} else {
 					i++;
 				}
 				break;
 			case "Q8":
-				while (search(phrase.charAt(i), SPACE)) {
+				if (search(phrase.charAt(i), SPACE)) {
 					i++;
-				}
-				if (search(phrase.charAt(i), LETTER)) {
+				} else if (search(phrase.charAt(i), LETTER)) {
 					state = "Q16";
 					i++;
 				} else if (phrase.charAt(i) == '=') {
@@ -148,10 +133,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q16":
-				while (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
+				if (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
 					i++;
-				}
-				if (phrase.charAt(i) == '=') {
+				} else if (phrase.charAt(i) == '=') {
 					state = "VARIAVEL";
 					i++;
 				} else if (phrase.charAt(i) == ',') {
@@ -162,10 +146,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q17":
-				while (search(phrase.charAt(i), SPACE)) {
+				if (search(phrase.charAt(i), SPACE)) {
 					i++;
-				}
-				if (search(phrase.charAt(i), LETTER)) {
+				} else if (search(phrase.charAt(i), LETTER)) {
 					state = "Q16";
 					i++;
 				} else if (phrase.charAt(i) == '/') {
@@ -176,21 +159,17 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q18":
-				if (phrase.charAt(i) == '*') {
-					i++;
-					if (phrase.charAt(i) == '/') {
-						state = "Q17";
-						i++;
-					}
+				if (isEndCommentBlock(phrase, i)) {
+					state = "Q17";
+					i += 2;
 				} else {
 					i++;
 				}
 				break;
 			case "VARIAVEL":
-				while (search(phrase.charAt(i), SPACE)) {
+				if (search(phrase.charAt(i), SPACE)) {
 					i++;
-				}
-				if (phrase.charAt(i) == '/') {
+				} else if (phrase.charAt(i) == '/') {
 					state = "E2";
 					i++;
 				} else if (search(phrase.charAt(i), LETTER)) {
@@ -204,21 +183,17 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q4":
-				if (phrase.charAt(i) == '*') {
-					i++;
-					if (phrase.charAt(i) == '/') {
-						state = "VARIAVEL";
-						i++;
-					}
+				if (isEndCommentBlock(phrase, i)) {
+					state = "VARIAVEL";
+					i += 2;
 				} else {
 					i++;
 				}
 				break;
 			case "Q13":
-				while (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
+				if (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
 					i++;
-				}
-				if (isBeginCommentBlock(phrase, i)) {
+				} else if (isBeginCommentBlock(phrase, i)) {
 					state = "E3";
 					i++;
 				} else if (phrase.charAt(i) == ';') {
@@ -239,10 +214,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q12":
-				while (search(phrase.charAt(i), SPACE)) {
+				if (search(phrase.charAt(i), SPACE)) {
 					i++;
-				}
-				if (isBeginCommentBlock(phrase, i)) {
+				} else if (isBeginCommentBlock(phrase, i)) {
 					state = "E7";
 					i += 2;
 				} else if (search(phrase.charAt(i), LETTER)) {
@@ -256,10 +230,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q7":
-				while (search(phrase.charAt(i), NUMBER)) {
+				if (search(phrase.charAt(i), NUMBER)) {
 					i++;
-				}
-				if (search(phrase.charAt(i), OPERATOR)) {
+				} else if (search(phrase.charAt(i), OPERATOR)) {
 					state = "Q12";
 					i++;
 				} else if (phrase.charAt(i) == ';') {
@@ -283,10 +256,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q19":
-				while (search(phrase.charAt(i), NUMBER)) {
+				if (search(phrase.charAt(i), NUMBER)) {
 					i++;
-				}
-				if (phrase.charAt(i) == '/') {
+				} else if (phrase.charAt(i) == '/') {
 					state = "E4";
 					i++;
 				} else if (search(phrase.charAt(i), SPACE)) {
@@ -312,10 +284,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q11":
-				while (search(phrase.charAt(i), SPACE)) {
+				if (search(phrase.charAt(i), SPACE)) {
 					i++;
-				}
-				if (phrase.charAt(i) == ';') {
+				} else if (phrase.charAt(i) == ';') {
 					state = "Q10";
 					i++;
 
@@ -328,6 +299,8 @@ public class LexicalScanner {
 				} else if (phrase.charAt(i) == '/') {
 					state = "E4";
 					i++;
+				} else {
+					return false;
 				}
 				break;
 			case "E0":
@@ -354,7 +327,7 @@ public class LexicalScanner {
 					return false;
 				}
 				break;
-			case "E3":				
+			case "E3":
 				if (isEndCommentBlock(phrase, i)) {
 					state = "Q13";
 					i += 2;
@@ -383,7 +356,7 @@ public class LexicalScanner {
 				if (isEndCommentBlock(phrase, i)) {
 					state = "Q10";
 					i += 2;
-					
+
 					if (isNextPositionEmpty(phrase, i)) {
 						return true;
 					}
@@ -407,7 +380,7 @@ public class LexicalScanner {
 
 		return false;
 	}
-	
+
 	private boolean isNextPositionEmpty(String phrase, int position) {
 		return (position + 1) >= phrase.length();
 	}

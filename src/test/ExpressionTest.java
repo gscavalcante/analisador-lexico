@@ -124,4 +124,17 @@ class ExpressionTest {
 	void commentOnMiddleWithouSpace() {
 		assertTrue(new LexicalScanner().validate("a = i/**/ + b;"));
 	}
+	
+	@Test
+	void expressionWithTwoOperatorsConnected() {
+		assertFalse(new LexicalScanner().validate("v = v++1;"));
+	}
+	
+	@Test
+	void incorrectExpression() {
+		assertFalse(new LexicalScanner().validate("v = v + 1 = v ;"));
+		assertFalse(new LexicalScanner().validate("v = v"));
+		assertFalse(new LexicalScanner().validate("v = v .."));
+		assertFalse(new LexicalScanner().validate("apenas uma mensagem sem sentido"));
+	}
 }
