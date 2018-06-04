@@ -90,7 +90,7 @@ public class LexicalScanner {
 				}
 
 				break;
-			case "Q5": // Q5
+			case "Q5":
 				return true;
 			case "Q30":
 				if (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
@@ -141,6 +141,9 @@ public class LexicalScanner {
 				} else if (phrase.charAt(i) == ',') {
 					state = "Q17";
 					i++;
+				} else if (search(phrase.charAt(i), SPACE)) {
+				    state = "Q21";
+				    i++;
 				} else {
 					return false;
 				}
@@ -303,6 +306,28 @@ public class LexicalScanner {
 					return false;
 				}
 				break;
+			case "Q21":
+			    if (isBeginCommentBlock(phrase, i)) {
+			        state = "Q22";
+			        i += 2;
+			    } else if (phrase.charAt(i) == '=') {
+			        state = "VARIAVEL";
+			        i++;
+			    } else if (phrase.charAt(i) == ',') {
+                    state = "Q17";
+                    i++;
+                } else {
+                    return false;
+                }
+			    break;
+			case "Q22":
+			    if (isEndCommentBlock(phrase, i)) {
+			        state = "Q21";
+			        i += 2;
+			    } else {
+			        i++;
+			    }
+			    break;
 			case "E0":
 				if (phrase.charAt(i) == '*') {
 					state = "Q0";
