@@ -88,6 +88,9 @@ public class LexicalScanner {
 				} else if (search(phrase.charAt(i), LETTER)) {
 					state = "Q30";
 					i++;
+				} else if (phrase.charAt(i) == '/') {
+					state = "Q1";
+					i++;
 				} else {
 					return isNextPositionEmpty(phrase, i);
 				}

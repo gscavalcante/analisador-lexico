@@ -70,8 +70,14 @@ class ExpressionTest {
 	}
 	
 	@Test
-	void commentOnEOL() {
+	void commentOfOnEOL() {
 		String exp = "i = i + 2; /* some comment */";
+		assertTrue(new LexicalScanner().validate(exp));
+	}
+	
+	@Test
+	void commentOnEOL() {
+		String exp = "i = i + 2; // some comment";
 		assertTrue(new LexicalScanner().validate(exp));
 	}
 	
