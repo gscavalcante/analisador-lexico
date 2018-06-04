@@ -109,5 +109,10 @@ class ExpressionTest {
 	void blankLine() {
 		assertTrue(new LexicalScanner().validate(null));
 	}
+	
+	@Test
+	void emptyString() {
+		assertTrue(new LexicalScanner().validate(""));
+	}
 
 }

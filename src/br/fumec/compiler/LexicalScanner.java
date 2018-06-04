@@ -19,7 +19,7 @@ public class LexicalScanner {
 		int i = 0;
 		String state = "Q14";
 		
-		if (phrase == null || phrase == "") {
+		if (phrase == null || phrase.equals("")) {
 			return true;
 		}
 

@@ -6,8 +6,6 @@ import java.io.IOException;
 
 public class MainFile {
 
-	final static String FILENAME = "";
-
 	public static void main(String[] args) {
 		if (args.length < 0) {
 			throw new RuntimeException("É necessário passar o nome do arquivo como paramêtro para o sistema.");
@@ -26,8 +24,8 @@ public class MainFile {
 			String line;
 			int i = 0;
 
-			while ((line = br.readLine()) != null) {				
-				if (! lx.validate(line)) {
+			while ((line = br.readLine()) != null) {
+				if (!lx.validate(line)) {
 					System.out.println("Line " + (i + 1) + " is invalid.");
 				}
 				i++;
