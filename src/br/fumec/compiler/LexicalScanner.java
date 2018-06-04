@@ -45,7 +45,7 @@ public class LexicalScanner {
 					state = "Q30";
 					i++;
 				} else {
-					return true;
+					return false;
 				}
 				break;
 			case "Q1":
