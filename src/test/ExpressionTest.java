@@ -86,5 +86,11 @@ class ExpressionTest {
 		String exp = "a = i+2;";
 		assertTrue(new LexicalScanner().validate(exp));
 	}
+	
+	@Test
+	void whiteSpace() {
+		String exp = "                ";
+		assertTrue(new LexicalScanner().validate(exp));
+	}
 
 }

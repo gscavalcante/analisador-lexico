@@ -18,6 +18,10 @@ public class LexicalScanner {
 	public boolean validate(String phrase) {
 		int i = 0;
 		String state = "Q14";
+		
+		if (phrase == null || phrase == "") {
+			return true;
+		}
 
 		while (i < phrase.length()) {
 
@@ -25,6 +29,10 @@ public class LexicalScanner {
 			case "Q14":
 				while (phrase.charAt(i) == SPACE) {
 					i++;
+					
+					if (isNextPositionEmpty(phrase, i)) {
+						return true;
+					}
 				}
 				if (phrase.charAt(i) == '/') {
 					state = "Q1";
