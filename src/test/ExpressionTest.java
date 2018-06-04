@@ -119,5 +119,9 @@ class ExpressionTest {
 	void emptyStringWithTabs() {
 		assertTrue(new LexicalScanner().validate("		"));
 	}
-
+	
+	@Test
+	void commentOnMiddleWithouSpace() {
+		assertTrue(new LexicalScanner().validate("a = i/**/ + b;"));
+	}
 }

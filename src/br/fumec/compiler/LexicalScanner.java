@@ -210,7 +210,7 @@ public class LexicalScanner {
 				while (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
 					i++;
 				}
-				if (phrase.charAt(i) == '/') {
+				if (isBeginCommentBlock(phrase, i)) {
 					state = "E3";
 					i++;
 				} else if (phrase.charAt(i) == ';') {
@@ -230,7 +230,7 @@ public class LexicalScanner {
 					return false;
 				}
 				break;
-			case "Q12": // Q12
+			case "Q12":
 				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 				}
@@ -346,12 +346,12 @@ public class LexicalScanner {
 					return false;
 				}
 				break;
-			case "E3":
-				if (phrase.charAt(i) == '*') {
+			case "E3":				
+				if (isEndCommentBlock(phrase, i)) {
 					state = "Q13";
-					i++;
+					i += 2;
 				} else {
-					return false;
+					i++;
 				}
 				break;
 			case "E4":
