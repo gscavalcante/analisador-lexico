@@ -74,7 +74,7 @@ public class MainFile {
 
     private static void printSystemExit(int errorCount) {
         if (errorCount > 0) {
-            System.out.println("A análise terminou com " + errorCount + "erro(s).");
+            System.out.println("A análise terminou com " + errorCount + " erro(s).");
         } else {
             System.out.println("A análise terminou e não foi encontrado nenhum erro.");
         }

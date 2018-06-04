@@ -6,10 +6,8 @@ public class LexicalScanner {
 	private final static String LETTER = "[a-zA-Z]";
 	private final static String OPERATOR = "[+\\-*/]";
 	private final static String SPACE = "[ \t]";
-
-	private boolean search(char character, String str) {
-		return String.valueOf(character).matches(str);
-	}
+	private final static String RESERVED_WORDS_FUNCTION = "(for|while|do|if|else|break|continue|case|switch|return|goto)";
+	private final static String RESERVED_WORDS_TYPES = "(int|boolean|string|long|double)";
 
 	public boolean validate(String phrase) {
 		int i = 0;
@@ -69,7 +67,7 @@ public class LexicalScanner {
 					i++;
 
 					if (isNextPositionEmpty(phrase, i)) {
-						return true;
+						return isEverythingCorrect(phrase);
 					}
 				}
 				break;
@@ -91,7 +89,7 @@ public class LexicalScanner {
 
 				break;
 			case "Q5":
-				return true;
+				return isEverythingCorrect(phrase);
 			case "Q30":
 				if (search(phrase.charAt(i), LETTER) || search(phrase.charAt(i), NUMBER)) {
 					i++;
@@ -204,7 +202,7 @@ public class LexicalScanner {
 					i++;
 
 					if (isNextPositionEmpty(phrase, i)) {
-						return true;
+						return isEverythingCorrect(phrase);
 					}
 				} else if (search(phrase.charAt(i), OPERATOR)) {
 					state = "Q12";
@@ -243,7 +241,7 @@ public class LexicalScanner {
 					i++;
 
 					if (isNextPositionEmpty(phrase, i)) {
-						return true;
+						return isEverythingCorrect(phrase);
 					}
 				} else if (phrase.charAt(i) == '.') {
 					state = "Q19";
@@ -272,7 +270,7 @@ public class LexicalScanner {
 					i++;
 
 					if (isNextPositionEmpty(phrase, i)) {
-						return true;
+						return isEverythingCorrect(phrase);
 					}
 				} else {
 					return false;
@@ -294,7 +292,7 @@ public class LexicalScanner {
 					i++;
 
 					if (isNextPositionEmpty(phrase, i)) {
-						return true;
+						return isEverythingCorrect(phrase);
 					}
 				} else if (isBeginCommentBlock(phrase, i)) {
 					state = "Q15";
@@ -374,7 +372,7 @@ public class LexicalScanner {
 					i += 2;
 
 					if (isNextPositionEmpty(phrase, i)) {
-						return true;
+						return isEverythingCorrect(phrase);
 					}
 				} else {
 					i++;
@@ -396,16 +394,51 @@ public class LexicalScanner {
 
 		return false;
 	}
+	
+	private boolean search(String word, String str) {
+        return word.matches(str);
+    }
+    
+    private boolean search(char character, final String str) {
+        return String.valueOf(character).matches(str);
+    }
 
-	private boolean isNextPositionEmpty(String phrase, int position) {
+	private boolean isNextPositionEmpty(final String phrase, int position) {
 		return (position + 1) >= phrase.length();
 	}
 
-	private boolean isBeginCommentBlock(String phrase, int i) {
+	private boolean isBeginCommentBlock(final String phrase, int i) {
 		return phrase.charAt(i) == '/' && (i + 1) < phrase.length() && phrase.charAt(i + 1) == '*';
 	}
 
-	private boolean isEndCommentBlock(String phrase, int i) {
+	private boolean isEndCommentBlock(final String phrase, int i) {
 		return phrase.charAt(i) == '*' && (i + 1) < phrase.length() && phrase.charAt(i + 1) == '/';
+	}
+	
+	private boolean isEverythingCorrect(final String phrase) {
+	    String tmpPhrase = phrase.replaceAll("((\\/\\/.*)|(\\/\\/*.*\\*\\/))", "").replaceAll(",", "").trim();
+	    String[] expressions = tmpPhrase.split("(;)");
+	    
+	    for (String expression : expressions) {
+	        String[] items = expression.trim().split(SPACE);
+	        int i = 0;
+	        
+	        if (search(items[1], LETTER)) {
+	            i = 1;
+	            
+	            if (search(items[0], RESERVED_WORDS_FUNCTION)) {
+	                return false;
+	            }
+	        }
+	        
+	        for (; i < items.length; i++) {
+	            String item = items[i];
+	            if (search(item, RESERVED_WORDS_FUNCTION) || search(item, RESERVED_WORDS_TYPES)) {
+	                return false;
+	            }
+	        }
+	    }
+	    
+	    return true;
 	}
 }
