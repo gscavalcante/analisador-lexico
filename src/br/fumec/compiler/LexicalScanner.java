@@ -276,9 +276,9 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q15":
-				if (phrase.charAt(i) == '*') {
-					state = "E5";
-					i++;
+				if (isEndCommentBlock(phrase, i)) {
+					state = "Q11";
+					i += 2;
 				} else {
 					i++;
 				}
@@ -293,11 +293,11 @@ public class LexicalScanner {
 					if (isNextPositionEmpty(phrase, i)) {
 						return true;
 					}
+				} else if (isBeginCommentBlock(phrase, i)) {
+					state = "Q15";
+					i += 2;
 				} else if (search(phrase.charAt(i), OPERATOR)) {
 					state = "Q12";
-					i++;
-				} else if (phrase.charAt(i) == '/') {
-					state = "E4";
 					i++;
 				} else {
 					return false;
@@ -341,15 +341,6 @@ public class LexicalScanner {
 					i++;
 				} else {
 					return false;
-				}
-				break;
-			case "E5":
-				if (phrase.charAt(i) == '/') {
-					state = "Q11";
-					i++;
-				} else {
-					state = "Q15";
-					i++;
 				}
 				break;
 			case "E6":
