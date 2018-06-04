@@ -12,6 +12,14 @@ public class LexicalScanner {
 	}
 
 	public boolean validate(String phrase) {
+		try {
+			return validateWithoutVerify(phrase);
+		} catch (IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+	
+	private boolean validateWithoutVerify(String phrase) {
 		int i = 0;
 		String state = "Q14";
 		
