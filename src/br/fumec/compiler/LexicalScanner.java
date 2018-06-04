@@ -5,14 +5,10 @@ public class LexicalScanner {
 	private final static String NUMBER = "[0-9]";
 	private final static String LETTER = "[a-zA-Z]";
 	private final static String OPERATOR = "[+\\-*/]";
-	private final static char SPACE = ' ';
+	private final static String SPACE = "[ \t]";
 
 	private boolean search(char character, String str) {
 		return String.valueOf(character).matches(str);
-	}
-
-	private boolean isNextPositionEmpty(String phrase, int position) {
-		return (position + 1) >= phrase.length();
 	}
 
 	public boolean validate(String phrase) {
@@ -27,7 +23,7 @@ public class LexicalScanner {
 
 			switch (state) {
 			case "Q14":
-				while (phrase.charAt(i) == SPACE) {
+				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 					
 					if (isNextPositionEmpty(phrase, i)) {
@@ -79,7 +75,7 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q10":
-				while (phrase.charAt(i) == SPACE) {
+				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 				}
 				if (isBeginCommentBlock(phrase, i)) {
@@ -108,7 +104,7 @@ public class LexicalScanner {
 				} else if (phrase.charAt(i) == '=') {
 					state = "VARIAVEL";
 					i++;
-				} else if (phrase.charAt(i) == SPACE) {
+				} else if (search(phrase.charAt(i), SPACE)) {
 					state = "Q8";
 					i++;
 				} else {
@@ -127,7 +123,7 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q8":
-				while (phrase.charAt(i) == SPACE) {
+				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 				}
 				if (search(phrase.charAt(i), LETTER)) {
@@ -158,7 +154,7 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q17":
-				while (phrase.charAt(i) == SPACE) {
+				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 				}
 				if (search(phrase.charAt(i), LETTER)) {
@@ -183,7 +179,7 @@ public class LexicalScanner {
 				}
 				break;
 			case "VARIAVEL":
-				while (phrase.charAt(i) == SPACE) {
+				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 				}
 				if (phrase.charAt(i) == '/') {
@@ -227,7 +223,7 @@ public class LexicalScanner {
 				} else if (search(phrase.charAt(i), OPERATOR)) {
 					state = "Q12";
 					i++;
-				} else if (phrase.charAt(i) == SPACE) {
+				} else if (search(phrase.charAt(i), SPACE)) {
 					state = "Q11";
 					i++;
 				} else {
@@ -235,7 +231,7 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q12": // Q12
-				while (phrase.charAt(i) == SPACE) {
+				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 				}
 				if (isBeginCommentBlock(phrase, i)) {
@@ -271,7 +267,7 @@ public class LexicalScanner {
 				} else if (phrase.charAt(i) == '/') {
 					state = "E4";
 					i++;
-				} else if (phrase.charAt(i) == SPACE) {
+				} else if (search(phrase.charAt(i), SPACE)) {
 					state = "Q11";
 					i++;
 				} else {
@@ -285,7 +281,7 @@ public class LexicalScanner {
 				if (phrase.charAt(i) == '/') {
 					state = "E4";
 					i++;
-				} else if (phrase.charAt(i) == SPACE) {
+				} else if (search(phrase.charAt(i), SPACE)) {
 					state = "Q11";
 					i++;
 				} else if (phrase.charAt(i) == ';') {
@@ -308,7 +304,7 @@ public class LexicalScanner {
 				}
 				break;
 			case "Q11":
-				while (phrase.charAt(i) == SPACE) {
+				while (search(phrase.charAt(i), SPACE)) {
 					i++;
 				}
 				if (phrase.charAt(i) == ';') {
@@ -402,6 +398,10 @@ public class LexicalScanner {
 		}
 
 		return false;
+	}
+	
+	private boolean isNextPositionEmpty(String phrase, int position) {
+		return (position + 1) >= phrase.length();
 	}
 
 	private boolean isBeginCommentBlock(String phrase, int i) {

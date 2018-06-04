@@ -114,5 +114,10 @@ class ExpressionTest {
 	void emptyString() {
 		assertTrue(new LexicalScanner().validate(""));
 	}
+	
+	@Test
+	void emptyStringWithTabs() {
+		assertTrue(new LexicalScanner().validate("		"));
+	}
 
 }
