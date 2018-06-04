@@ -41,6 +41,10 @@ public class LexicalScanner {
 				if (phrase.charAt(i) == '/') {
 					state = "Q5";
 					i++;
+					
+					if (isNextPositionEmpty(phrase, i)) {
+					    return true;
+					}
 				} else if (phrase.charAt(i) == '*') {
 					state = "Q2";
 					i++;
@@ -417,6 +421,10 @@ public class LexicalScanner {
 	
 	private boolean isEverythingCorrect(final String phrase) {
 	    String tmpPhrase = phrase.replaceAll("((\\/\\/.*)|(\\/\\/*.*\\*\\/))", "").replaceAll(",", "").trim();
+	    if (tmpPhrase.isEmpty()) {
+	        return true;
+	    }
+	    
 	    String[] expressions = tmpPhrase.split("(;)");
 	    
 	    for (String expression : expressions) {

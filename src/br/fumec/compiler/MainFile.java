@@ -36,7 +36,9 @@ public class MainFile {
 
 			while ((line = br.readLine()) != null) {
 				if (!lx.validate(line)) {
-					bw.write("Line " + (i + 1) + " is invalid.\n");
+					bw.write("Line " + (i + 1) + " is invalid.");
+					bw.newLine();
+					bw.write("\tCode: (" + line + ")");
 					bw.newLine();
 					errorCount++;
 				}
