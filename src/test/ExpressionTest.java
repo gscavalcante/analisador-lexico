@@ -70,6 +70,12 @@ class ExpressionTest {
 	}
 	
 	@Test
+	void commentOnEOL() {
+		String exp = "i = i + 2; /* some comment */";
+		assertTrue(new LexicalScanner().validate(exp));
+	}
+	
+	@Test
 	void twoExpressions() {
 		String exp = "i = i + 2; a = a * b;";
 		assertTrue(new LexicalScanner().validate(exp));
@@ -91,6 +97,11 @@ class ExpressionTest {
 	void whiteSpace() {
 		String exp = "                ";
 		assertTrue(new LexicalScanner().validate(exp));
+	}
+	
+	@Test
+	void blankLine() {
+		assertTrue(new LexicalScanner().validate(null));
 	}
 
 }

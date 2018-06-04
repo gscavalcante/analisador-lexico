@@ -376,6 +376,10 @@ public class LexicalScanner {
 				if (isEndCommentBlock(phrase, i)) {
 					state = "Q10";
 					i += 2;
+					
+					if (isNextPositionEmpty(phrase, i)) {
+						return true;
+					}
 				} else {
 					i++;
 				}
