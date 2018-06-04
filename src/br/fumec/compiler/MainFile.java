@@ -10,15 +10,11 @@ public class MainFile {
 	
 	public static void main(String[] args) {
 		if (args.length < 0) {
-			throw new RuntimeException("� necess�rio passar o nome do arquivo como param�tro para o sistema.");
+			throw new RuntimeException("É necessário passar o nome do arquivo como paramêtro para o sistema.");
 		}
 		
 		String file_input = args[0];
-		String file_output = "saida.txt";
-		
-		if (args.length > 1) {
-			file_output = args[1];
-		}
+		String file_output = getFileOutputName(args);
 		
 		LexicalScanner lx = new LexicalScanner();
 
@@ -36,15 +32,18 @@ public class MainFile {
 			bw = new BufferedWriter(fw);
 
 			String line;
-			int i = 0;
+			int i = 0, errorCount = 0;
 
 			while ((line = br.readLine()) != null) {
 				if (!lx.validate(line)) {
 					bw.write("Line " + (i + 1) + " is invalid.\n");
 					bw.newLine();
+					errorCount++;
 				}
 				i++;
 			}
+			
+			printSystemExit(errorCount);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -64,5 +63,21 @@ public class MainFile {
 		}
 
 	}
+
+    private static String getFileOutputName(String[] args) {
+		if (args.length > 1) {
+			return args[1];
+		}
+
+        return "saida.txt";
+    }
+
+    private static void printSystemExit(int errorCount) {
+        if (errorCount > 0) {
+            System.out.println("A análise terminou com " + errorCount + "erro(s).");
+        } else {
+            System.out.println("A análise terminou e não foi encontrado nenhum erro.");
+        }
+    }
 
 }
