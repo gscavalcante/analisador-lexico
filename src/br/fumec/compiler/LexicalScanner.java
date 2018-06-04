@@ -22,11 +22,11 @@ public class LexicalScanner {
 			switch (state) {
 			case "Q14":
 				if (search(phrase.charAt(i), SPACE)) {
-					i++;
-
 					if (isNextPositionEmpty(phrase, i)) {
 						return true;
 					}
+					
+					i++;
 				} else if (phrase.charAt(i) == '/') {
 					state = "Q1";
 					i++;
@@ -39,12 +39,12 @@ public class LexicalScanner {
 				break;
 			case "Q1":
 				if (phrase.charAt(i) == '/') {
-					state = "Q5";
-					i++;
-					
 					if (isNextPositionEmpty(phrase, i)) {
 					    return true;
 					}
+					
+					state = "Q5";
+					i++;
 				} else if (phrase.charAt(i) == '*') {
 					state = "Q2";
 					i++;
@@ -67,17 +67,21 @@ public class LexicalScanner {
 					state = "Q2";
 					i++;
 				} else {
-					state = "Q10";
-					i++;
-
 					if (isNextPositionEmpty(phrase, i)) {
 						return isEverythingCorrect(phrase);
 					}
+					
+					state = "Q10";
+					i++;
 				}
 				break;
 			case "Q10":
-				if (search(phrase.charAt(i), SPACE)) {
-					i++;
+				if (search(phrase.charAt(i), SPACE)) {					
+				    i++;
+				    
+					if (isNextPositionEmpty(phrase, i)) {
+					    return true;
+					}
 				} else if (isBeginCommentBlock(phrase, i)) {
 					state = "E6";
 					i += 2;
@@ -88,7 +92,7 @@ public class LexicalScanner {
 					state = "Q1";
 					i++;
 				} else {
-					return isNextPositionEmpty(phrase, i);
+					return false;
 				}
 
 				break;
@@ -202,12 +206,12 @@ public class LexicalScanner {
 					state = "E3";
 					i++;
 				} else if (phrase.charAt(i) == ';') {
-					state = "Q10";
-					i++;
-
 					if (isNextPositionEmpty(phrase, i)) {
 						return isEverythingCorrect(phrase);
 					}
+					
+					state = "Q10";
+					i++;
 				} else if (search(phrase.charAt(i), OPERATOR)) {
 					state = "Q12";
 					i++;
@@ -241,12 +245,12 @@ public class LexicalScanner {
 					state = "Q12";
 					i++;
 				} else if (phrase.charAt(i) == ';') {
-					state = "Q10";
-					i++;
-
 					if (isNextPositionEmpty(phrase, i)) {
 						return isEverythingCorrect(phrase);
 					}
+					
+					state = "Q10";
+					i++;
 				} else if (phrase.charAt(i) == '.') {
 					state = "Q19";
 					i++;
@@ -270,12 +274,12 @@ public class LexicalScanner {
 					state = "Q11";
 					i++;
 				} else if (phrase.charAt(i) == ';') {
-					state = "Q10";
-					i++;
-
 					if (isNextPositionEmpty(phrase, i)) {
 						return isEverythingCorrect(phrase);
 					}
+					
+					state = "Q10";
+					i++;
 				} else {
 					return false;
 				}
@@ -292,12 +296,12 @@ public class LexicalScanner {
 				if (search(phrase.charAt(i), SPACE)) {
 					i++;
 				} else if (phrase.charAt(i) == ';') {
-					state = "Q10";
-					i++;
-
 					if (isNextPositionEmpty(phrase, i)) {
 						return isEverythingCorrect(phrase);
 					}
+					
+					state = "Q10";
+					i++;
 				} else if (isBeginCommentBlock(phrase, i)) {
 					state = "Q15";
 					i += 2;
@@ -372,12 +376,12 @@ public class LexicalScanner {
 				break;
 			case "E6":
 				if (isEndCommentBlock(phrase, i)) {
-					state = "Q10";
-					i += 2;
-
-					if (isNextPositionEmpty(phrase, i)) {
+					if (isNextPositionEmpty(phrase, i + 1)) {
 						return isEverythingCorrect(phrase);
 					}
+					
+					state = "Q10";
+					i += 2;
 				} else {
 					i++;
 				}
